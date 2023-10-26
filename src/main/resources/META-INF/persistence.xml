@@ -6,9 +6,9 @@
 
     <persistence-unit name="TpPU" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
-        <class>fr.univtln.tdomenge293.model.Materiel</class>
-        <class>fr.univtln.tdomenge293.model.Salle</class>
-        <class>fr.univtln.tdomenge293.model.Tag</class>
+        <class>fr.univ.tln.tdomenge293.model.jpa_impl.OrderJpaImpl</class>
+        <class>fr.univ.tln.tdomenge293.model.jpa_impl.ClientJpaImpl</class>
+        <class>fr.univ.tln.tdomenge293.model.jpa_impl.OrderLineJpaImpl</class>
 
         <properties>
             <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>

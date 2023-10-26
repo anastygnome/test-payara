@@ -1,5 +1,9 @@
 package fr.univ.tln.tdomenge293;
 
+import fr.univ.tln.tdomenge293.model.jpa_impl.ClientJpaImpl;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
@@ -18,8 +22,10 @@ public class MyResource {
      * @return String that will be returned as a text/plain response.
      */
     @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public String getIt() {
-        return "Got it!";
+    @Produces(MediaType.APPLICATION_JSON)
+    public ClientJpaImpl getIt() {
+        ClientJpaImpl clientJpa = ClientJpaImpl.of("test","test","test");
+        return clientJpa;
+
     }
 }

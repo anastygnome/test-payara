@@ -1,11 +1,12 @@
-package fr.univ.tln.tdomenge293.interfaces;
+package fr.univ.tln.tdomenge293.interfaces.model;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 public interface Item {
-    String getNumber();
+    UUID getNumber();
 
-    void setNumber(String number);
+    void setNumber(UUID number);
 
     String getName();
 

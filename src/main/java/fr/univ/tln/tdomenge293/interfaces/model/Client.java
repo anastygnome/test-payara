@@ -1,6 +1,12 @@
-package fr.univ.tln.tdomenge293.interfaces;
+package fr.univ.tln.tdomenge293.interfaces.model;
+
+import java.util.UUID;
 
 public interface Client {
+    UUID getNumber();
+
+    void setNumber(UUID number);
+
     String getFirstName();
 
     void setFirstName(String firstName);
