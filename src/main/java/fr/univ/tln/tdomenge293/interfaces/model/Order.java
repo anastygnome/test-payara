@@ -3,7 +3,6 @@ package fr.univ.tln.tdomenge293.interfaces.model;
 import java.math.BigDecimal;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 public interface Order {
     Client getClient();
@@ -15,8 +14,8 @@ public interface Order {
     void setNumber(UUID number);
 
 
+    Set<? extends OrderLine> getOrderLines();
 
-Set<? extends OrderLine> getOrderLines();
     default BigDecimal getTotalPrice() {
         return getOrderLines().stream()
                 .map(OrderLine::getPrice)

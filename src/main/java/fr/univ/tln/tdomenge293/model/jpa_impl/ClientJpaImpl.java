@@ -1,11 +1,13 @@
 package fr.univ.tln.tdomenge293.model.jpa_impl;
 
 import fr.univ.tln.tdomenge293.interfaces.model.Client;
-import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.proxy.HibernateProxy;
 
 import java.util.Objects;

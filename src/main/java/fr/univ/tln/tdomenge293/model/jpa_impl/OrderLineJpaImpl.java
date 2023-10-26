@@ -7,7 +7,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import lombok.*;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.proxy.HibernateProxy;
 
 import java.util.Objects;
@@ -27,11 +30,11 @@ public class OrderLineJpaImpl implements OrderLine {
     @JoinColumn(name = "item_number", nullable = false)
     ItemJpaImpl item;
     int quantity;
+
     public void setOrder(Order order) {
         if (order instanceof OrderJpaImpl) {
             this.order = (OrderJpaImpl) order;
-        }
-        else  throw new IllegalArgumentException("Bad type");
+        } else throw new IllegalArgumentException("Bad type");
     }
 
     @Override

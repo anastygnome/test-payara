@@ -13,9 +13,8 @@ public class OrderLineCollImpl implements OrderLine {
 
     @Override
     public void setOrder(Order order) {
-        if (order instanceof  OrderCollImpl) {
+        if (order instanceof OrderCollImpl) {
             this.order = (OrderCollImpl) order;
-        }
-        else  throw new IllegalArgumentException("Bad type");
+        } else throw new IllegalArgumentException("Bad type");
     }
 }

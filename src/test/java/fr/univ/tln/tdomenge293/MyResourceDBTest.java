@@ -1,6 +1,5 @@
 package fr.univ.tln.tdomenge293;
 
-import fr.univ.tln.tdomenge293.Main;
 import fr.univ.tln.tdomenge293.model.jpa_impl.ClientJpaImpl;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -15,17 +14,17 @@ import org.junit.jupiter.api.*;
 @Slf4j
 class MyResourceDBTest {
 
+    private final Client client = ClientBuilder.newClient();
     private HttpServer server;
     private WebTarget target;
-    private final Client client = ClientBuilder.newClient();
 
     @BeforeEach
     public void setUp() throws Exception {
         // start the server
         server = Main.startServer();
         // create the client
-            target = client.target(Main.BASE_URI);
-        }
+        target = client.target(Main.BASE_URI);
+    }
 
     @AfterEach
     public void tearDown() throws Exception {
@@ -40,7 +39,7 @@ class MyResourceDBTest {
     @Test
     void testGetIt() {
         ClientJpaImpl responseMsg = target.path("myresource").request().get(ClientJpaImpl.class);
-        ClientJpaImpl test =  ClientJpaImpl.of("test","test","test");
+        ClientJpaImpl test = ClientJpaImpl.of("test", "test", "test");
         test.setNumber(responseMsg.getNumber());
         try (EntityManagerFactory emf = Persistence.createEntityManagerFactory("TpPU");
              EntityManager em = emf.createEntityManager()
@@ -50,7 +49,7 @@ class MyResourceDBTest {
         log.info(String.valueOf(test.hashCode()));
         log.info(String.valueOf(test.hashCode()));
         log.info(responseMsg.toString());
-        Assertions.assertEquals(test,responseMsg);
+        Assertions.assertEquals(test, responseMsg);
 
     }
 }

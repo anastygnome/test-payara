@@ -1,6 +1,7 @@
 package fr.univ.tln.tdomenge293.DAO.JPA;
 
-import jakarta.persistence.*;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
@@ -8,17 +9,17 @@ import jakarta.persistence.criteria.Root;
 import java.util.List;
 import java.util.UUID;
 
- abstract class GenericDAO<T>  implements AutoCloseable{
+abstract class GenericDAO<T> implements AutoCloseable {
 
-    private final Class<T> entityClass;
     final EntityManager entityManager;
+    private final Class<T> entityClass;
 
     protected GenericDAO(Class<T> entityClass, EntityManager entityManager) {
         this.entityClass = entityClass;
         this.entityManager = entityManager;
     }
 
-    public T findById( UUID id) {
+    public T findById(UUID id) {
         return entityManager.find(entityClass, id);
     }
 
@@ -58,15 +59,16 @@ import java.util.UUID;
         entityManager.remove(entityManager.contains(entity) ? entity : entityManager.merge(entity));
         entityManager.getTransaction().commit();
     }
-     public void deleteByID(UUID id ) {
-         entityManager.getTransaction().begin();
-         entityManager.remove(findById(id));
-         entityManager.getTransaction().commit();
-     }
+
+    public void deleteByID(UUID id) {
+        entityManager.getTransaction().begin();
+        entityManager.remove(findById(id));
+        entityManager.getTransaction().commit();
+    }
 
 
-     @Override
-    public void close () {
+    @Override
+    public void close() {
         entityManager.close();
     }
 }

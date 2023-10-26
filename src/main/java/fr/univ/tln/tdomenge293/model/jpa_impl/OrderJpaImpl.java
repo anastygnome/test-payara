@@ -4,7 +4,10 @@ import fr.univ.tln.tdomenge293.interfaces.model.Client;
 import fr.univ.tln.tdomenge293.interfaces.model.Order;
 import fr.univ.tln.tdomenge293.interfaces.model.OrderLine;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.proxy.HibernateProxy;
 
 import java.util.*;
@@ -39,8 +42,8 @@ public class OrderJpaImpl implements Order {
         }
     }
 
-        public void setOrderLines(Set<OrderLine> items) {
-            orderLines = new HashSet<>();
+    public void setOrderLines(Set<OrderLine> items) {
+        orderLines = new HashSet<>();
         items.stream().filter(OrderLineJpaImpl.class::isInstance).forEach(ord -> orderLines.add((OrderLineJpaImpl) ord));
     }
 
