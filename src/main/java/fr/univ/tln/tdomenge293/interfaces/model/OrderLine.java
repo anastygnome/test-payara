@@ -1,8 +1,10 @@
 package fr.univ.tln.tdomenge293.interfaces.model;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
-public interface OrderLine {
+public interface OrderLine extends Serializable {
+     long serialVersionUID = 1L;
     Order getOrder();
 
     void setOrder(Order order);

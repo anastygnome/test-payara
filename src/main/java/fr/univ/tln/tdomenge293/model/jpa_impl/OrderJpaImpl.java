@@ -8,8 +8,12 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SourceType;
 import org.hibernate.proxy.HibernateProxy;
 
+import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.*;
 
 @Getter
@@ -17,18 +21,23 @@ import java.util.*;
 @ToString
 @RequiredArgsConstructor
 @Entity
-public class OrderJpaImpl implements Order {
+@Table(name = "ORDERS")
+
+public class OrderJpaImpl implements Order, Serializable {
     @Id
     UUID number;
-
+    @CreationTimestamp(source = SourceType.DB)
+    @Column( nullable = false, updatable = false, insertable = false)
+    LocalDate date;
 
     @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, optional = false, orphanRemoval = true)
-    @JoinColumn(name = "client_jpa_impl_number", nullable = false)
+    @JoinColumn(name = "client_number", nullable = false)
     private ClientJpaImpl client;
 
     @ToString.Exclude
     @OneToMany(mappedBy = "order", orphanRemoval = true)
     private Set<OrderLineJpaImpl> orderLines = new LinkedHashSet<>();
+    private static final long serialVersionUID=1;
 
     @Override
     public Client getClient() {

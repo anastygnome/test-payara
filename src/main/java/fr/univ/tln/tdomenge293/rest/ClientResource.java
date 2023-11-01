@@ -48,8 +48,8 @@ public class ClientResource {
         try {
             dao.create(r);
             newResourceUri = uriInfo.getAbsolutePathBuilder().path(r.getNumber().toString()).build();
-            dao.delete(r);
-            return Response.ok().build();
+            //dao.delete(r);
+            return Response.created(newResourceUri).entity(r).build();
         } catch (IllegalStateException e) {
             UUID existingId = dao.findIdByEmail(r.getEmail());
             if (existingId != null) {

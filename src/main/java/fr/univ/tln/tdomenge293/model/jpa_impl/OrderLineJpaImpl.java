@@ -3,34 +3,34 @@ package fr.univ.tln.tdomenge293.model.jpa_impl;
 import fr.univ.tln.tdomenge293.interfaces.model.Item;
 import fr.univ.tln.tdomenge293.interfaces.model.Order;
 import fr.univ.tln.tdomenge293.interfaces.model.OrderLine;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import jakarta.persistence.*;
+import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
 
+import java.io.Serializable;
 import java.util.Objects;
+import java.util.UUID;
 
 @Getter
 @Setter
 @ToString
 @RequiredArgsConstructor
 @Entity
-public class OrderLineJpaImpl implements OrderLine {
-    @Id
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "order_number", nullable = false)
-    OrderJpaImpl order;
-    @Id
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "item_number", nullable = false)
-    ItemJpaImpl item;
-    int quantity;
+@Table(name="ORDER_ITEMS")
+public class OrderLineJpaImpl implements OrderLine,Serializable{
+    private static final long serialVersionUID=1L;
 
+    @EmbeddedId
+    private OrderLinePK orderLinePK;
+
+    @ManyToOne
+    @MapsId("orderId")
+    private OrderJpaImpl order;
+
+    @ManyToOne
+    @MapsId("itemId")
+    private ItemJpaImpl item;
+    private int quantity;
     public void setOrder(Order order) {
         if (order instanceof OrderJpaImpl) {
             this.order = (OrderJpaImpl) order;
@@ -56,5 +56,18 @@ public class OrderLineJpaImpl implements OrderLine {
     @Override
     public final int hashCode() {
         return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
+    }
+
+    @Embeddable
+    @RequiredArgsConstructor
+    @EqualsAndHashCode
+    public static final class OrderLinePK implements Serializable {
+        private static final long serialVersionUID=1L;
+        @Column(name = "order_number", nullable = false)
+        private UUID orderId;
+        @Column(name = "item_number", nullable = false)
+        private UUID itemId;
+        // getters, setters, hashCode, and equals
+
     }
 }

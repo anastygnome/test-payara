@@ -18,6 +18,7 @@ import java.util.UUID;
 @ToString
 @NoArgsConstructor
 @Entity
+@Table(name = "CLIENTS")
 public class ClientJpaImpl implements Client {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -27,6 +28,7 @@ public class ClientJpaImpl implements Client {
     @NotNull @Email
     @Column(unique = true)
     String email;
+    private static final long serialVersionUID=1;
 
     private ClientJpaImpl(String firstName, String lastName, String email) {
         this.firstName = firstName;

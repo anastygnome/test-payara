@@ -1,16 +1,14 @@
 package fr.univ.tln.tdomenge293.model.jpa_impl;
 
 import fr.univ.tln.tdomenge293.interfaces.model.Item;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.proxy.HibernateProxy;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
@@ -20,13 +18,15 @@ import java.util.UUID;
 @ToString
 @RequiredArgsConstructor
 @Entity
-public class ItemJpaImpl implements Item {
+@Table(name = "ITEMS")
+
+public class ItemJpaImpl implements Item, Serializable {
     String name;
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     UUID number;
     BigDecimal price;
-
+    private static final long serialVersionUID=1L;
     @Override
     public final boolean equals(Object o) {
         if (this == o) return true;

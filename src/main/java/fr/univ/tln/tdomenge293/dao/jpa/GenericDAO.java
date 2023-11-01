@@ -32,7 +32,9 @@ abstract class GenericDAO<T, K extends Serializable> {
         EntityType<T> entityType = entityManagerFactory.getMetamodel().entity(entityClass);
         try {
             @SuppressWarnings("unchecked")
-            // SAFETY: we know the cast is safe because the key is necessarily of type K
+            // SAFETY: The following cast is unchecked because Java's type erasure means
+            // we don't have direct runtime information about the generic type K.
+            // we trust Hibernate gives us information here
             Class<K> keyClassCast = (Class<K>) entityType.getIdType().getJavaType();
             this.keyClass = keyClassCast;
         } catch (ClassCastException e) {

@@ -38,6 +38,7 @@ public class Main {
         try {
             tmp = Persistence.createEntityManagerFactory("TpPU");
         } catch (Exception e) {
+            log.info(e.getMessage());
             log.warn("NO DB");
         }
         emf = tmp;
@@ -94,7 +95,9 @@ public class Main {
         final ObjectMapper mapper;
 
         public CustomJacksonMapperProvider() {
-            mapper = new ObjectMapper().registerModule(new Hibernate6Module()).registerModule(new JavaTimeModule()).registerModule(new ParameterNamesModule(JsonCreator.Mode.PROPERTIES))
+            mapper = new ObjectMapper().registerModule(new Hibernate6Module()).
+                    registerModule(new JavaTimeModule())
+                    .registerModule(new ParameterNamesModule(JsonCreator.Mode.PROPERTIES))
                     // to allow implicit json construction without JsonProperty in constructor in some cases
                     .enable(SerializationFeature.INDENT_OUTPUT)             // enable pretty print (indent the JSON
                     .enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
