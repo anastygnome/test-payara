@@ -1,16 +1,7 @@
 package fr.univ.tln.tdomenge293;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.hibernate6.Hibernate6Module;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
-import jakarta.ws.rs.ext.ContextResolver;
-import jakarta.ws.rs.ext.Provider;
 import lombok.extern.slf4j.Slf4j;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.grizzly.http2.Http2AddOn;
@@ -52,7 +43,7 @@ public class Main {
     public static HttpServer startServer() {
         // create a resource config that scans for JAX-RS resources and providers
         // in fr.univ.tln.tdomenge293.rest package
-        final ResourceConfig rc = new ResourceConfig().packages("fr.univ.tln.tdomenge293.rest").register(CustomJacksonMapperProvider.class);
+        final ResourceConfig rc = new ResourceConfig().packages("fr.univ.tln.tdomenge293.rest","fr.univ.tln.tdomenge293.utils.rest");
 
 
         Http2Configuration configuration = Http2Configuration.builder().build();
@@ -89,24 +80,6 @@ public class Main {
 
     }
 
-    @Provider
-    public static final class CustomJacksonMapperProvider implements ContextResolver<ObjectMapper> {
-
-        final ObjectMapper mapper;
-
-        public CustomJacksonMapperProvider() {
-            mapper = new ObjectMapper().registerModule(new Hibernate6Module()).
-                    registerModule(new JavaTimeModule())
-                    .registerModule(new ParameterNamesModule(JsonCreator.Mode.PROPERTIES))
-                    // to allow implicit json construction without JsonProperty in constructor in some cases
-                    .enable(SerializationFeature.INDENT_OUTPUT)             // enable pretty print (indent the JSON
-                    .enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
-        }
-
-        @Override
-        public ObjectMapper getContext(Class<?> type) {
-            return mapper;
-        }
-    }
 }
+
 

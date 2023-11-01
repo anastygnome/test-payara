@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
@@ -16,21 +17,26 @@ import java.util.UUID;
 @ToString
 @RequiredArgsConstructor
 @Entity
-@Table(name="ORDER_ITEMS")
-public class OrderLineJpaImpl implements OrderLine,Serializable{
-    private static final long serialVersionUID=1L;
+@Table(name = "orders_items",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"order_number", "item_number"}))
+public class OrderLineJpaImpl implements OrderLine, Serializable {
+@Serial
+    private static final long serialVersionUID = 1L;
 
-    @EmbeddedId
-    private OrderLinePK orderLinePK;
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     @ManyToOne
-    @MapsId("orderId")
+    @JoinColumn(name = "order_number", nullable = false)
     private OrderJpaImpl order;
 
     @ManyToOne
-    @MapsId("itemId")
+    @JoinColumn(name = "item_number", nullable = false)
     private ItemJpaImpl item;
+
     private int quantity;
+
     public void setOrder(Order order) {
         if (order instanceof OrderJpaImpl) {
             this.order = (OrderJpaImpl) order;
@@ -56,18 +62,5 @@ public class OrderLineJpaImpl implements OrderLine,Serializable{
     @Override
     public final int hashCode() {
         return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
-    }
-
-    @Embeddable
-    @RequiredArgsConstructor
-    @EqualsAndHashCode
-    public static final class OrderLinePK implements Serializable {
-        private static final long serialVersionUID=1L;
-        @Column(name = "order_number", nullable = false)
-        private UUID orderId;
-        @Column(name = "item_number", nullable = false)
-        private UUID itemId;
-        // getters, setters, hashCode, and equals
-
     }
 }

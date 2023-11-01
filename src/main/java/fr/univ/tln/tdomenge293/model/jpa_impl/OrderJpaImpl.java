@@ -12,7 +12,9 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SourceType;
 import org.hibernate.proxy.HibernateProxy;
 
+import java.io.Serial;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -29,14 +31,15 @@ public class OrderJpaImpl implements Order, Serializable {
     @CreationTimestamp(source = SourceType.DB)
     @Column( nullable = false, updatable = false, insertable = false)
     LocalDate date;
-
+    BigDecimal price = BigDecimal.ZERO;
     @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, optional = false, orphanRemoval = true)
     @JoinColumn(name = "client_number", nullable = false)
     private ClientJpaImpl client;
 
     @ToString.Exclude
-    @OneToMany(mappedBy = "order", orphanRemoval = true)
+    @OneToMany(mappedBy = "order", orphanRemoval = true,cascade = {CascadeType.PERSIST,CascadeType.MERGE})
     private Set<OrderLineJpaImpl> orderLines = new LinkedHashSet<>();
+   @Serial
     private static final long serialVersionUID=1;
 
     @Override
@@ -49,6 +52,16 @@ public class OrderJpaImpl implements Order, Serializable {
         if (client instanceof ClientJpaImpl) {
             this.client = (ClientJpaImpl) client;
         }
+    }
+public void addLine(OrderLineJpaImpl line) {
+        line.setOrder(this);
+        getOrderLines().add(line);
+        setPrice(getPrice().add(line.getPrice()));
+}
+
+    @Override
+    public BigDecimal getTotalPrice() {
+        return getPrice();
     }
 
     public void setOrderLines(Set<OrderLine> items) {

@@ -8,6 +8,7 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.proxy.HibernateProxy;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -26,6 +27,7 @@ public class ItemJpaImpl implements Item, Serializable {
     @GeneratedValue(strategy = GenerationType.UUID)
     UUID number;
     BigDecimal price;
+    @Serial
     private static final long serialVersionUID=1L;
     @Override
     public final boolean equals(Object o) {

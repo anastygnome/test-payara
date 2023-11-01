@@ -4,6 +4,7 @@ import fr.univ.tln.tdomenge293.dao.jpa.ClientDAO;
 import fr.univ.tln.tdomenge293.model.jpa_impl.ClientJpaImpl;
 import jakarta.persistence.PersistenceException;
 import jakarta.persistence.RollbackException;
+import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.*;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +31,7 @@ public class ClientResource {
     }
 
     @GET
+    @Valid
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public ClientJpaImpl getclient(@PathParam("id") UUID id) {
@@ -41,7 +43,7 @@ public class ClientResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response receiveClient(@Context UriInfo uriInfo, ClientJpaImpl r) {
+    public Response receiveClient(@Context UriInfo uriInfo, @Valid ClientJpaImpl r) {
         URI newResourceUri;
         if (r == null || r.getNumber() != null) throw new BadRequestException();
         log.info(r.toString());

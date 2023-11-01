@@ -15,7 +15,7 @@
             <property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql://db:5432,127.0.0.1:5432/TP_BDD"/>
             <property name="jakarta.persistence.jdbc.user" value="postgres"/>
             <property name="jakarta.persistence.jdbc.password" value="test"/>
-            <property name="hibernate.hbm2ddl.auto" value="create"/>
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
             <!--property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"-->
             <property name="hibernate.show_sql" value="false"/>
             <property name="hibernate.connection.provider_class"
