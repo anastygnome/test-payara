@@ -3,8 +3,6 @@ package fr.univ.tln.tdomenge293.utils;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Pattern;
-
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
@@ -27,3 +25,6 @@ public @interface ExtendedEmailValidator {
     // with the final * replaced by + to impose a tld
     // i.e. john@doe is considered valid, we impose a domain.
 }
+
+
+

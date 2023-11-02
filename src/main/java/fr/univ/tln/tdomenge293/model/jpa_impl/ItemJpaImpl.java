@@ -2,6 +2,9 @@ package fr.univ.tln.tdomenge293.model.jpa_impl;
 
 import fr.univ.tln.tdomenge293.interfaces.model.Item;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.Min;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -26,6 +29,8 @@ public class ItemJpaImpl implements Item, Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     UUID number;
+    @DecimalMin(value = "0.0")
+    @Digits(integer=6, fraction=3)
     BigDecimal price;
     @Serial
     private static final long serialVersionUID=1L;

@@ -82,10 +82,6 @@ abstract class GenericDAO<T, K extends Serializable> {
             entityManager.persist(entity);
             entityManager.getTransaction().commit();
             return entity;
-        } catch (RollbackException e) {
-            if (e.getCause() instanceof ConstraintViolationException) {
-                throw new IllegalStateException("Duplicate");
-            } else throw e;
         }
     }
 

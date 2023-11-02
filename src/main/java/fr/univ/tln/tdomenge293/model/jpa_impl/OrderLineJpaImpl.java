@@ -4,6 +4,7 @@ import fr.univ.tln.tdomenge293.interfaces.model.Item;
 import fr.univ.tln.tdomenge293.interfaces.model.Order;
 import fr.univ.tln.tdomenge293.interfaces.model.OrderLine;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
 
@@ -20,26 +21,26 @@ import java.util.UUID;
 @Table(name = "orders_items",
         uniqueConstraints = @UniqueConstraint(columnNames = {"order_number", "item_number"}))
 public class OrderLineJpaImpl implements OrderLine, Serializable {
-@Serial
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "order_number", nullable = false)
     private OrderJpaImpl order;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, optional = false)
     @JoinColumn(name = "item_number", nullable = false)
     private ItemJpaImpl item;
-
+    @Min(0)
     private int quantity;
 
     public void setOrder(Order order) {
-        if (order instanceof OrderJpaImpl) {
-            this.order = (OrderJpaImpl) order;
+        if (order instanceof OrderJpaImpl orderJ) {
+            this.order = orderJ;
         } else throw new IllegalArgumentException("Bad type");
     }
 
@@ -52,15 +53,24 @@ public class OrderLineJpaImpl implements OrderLine, Serializable {
     public final boolean equals(Object o) {
         if (this == o) return true;
         if (o == null) return false;
-        Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
-        Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
+
+        Class<?> oEffectiveClass = (o instanceof HibernateProxy hibernateProxy) ?
+                hibernateProxy.getHibernateLazyInitializer().getPersistentClass() : o.getClass();
+
+        Class<?> thisEffectiveClass = (this instanceof HibernateProxy hibernateProxy) ?
+                hibernateProxy.getHibernateLazyInitializer().getPersistentClass() : this.getClass();
+
         if (thisEffectiveClass != oEffectiveClass) return false;
+
         OrderLineJpaImpl orderLine = (OrderLineJpaImpl) o;
-        return getOrder() != null && Objects.equals(getOrder(), orderLine.getOrder());
+
+        return getId() != null && orderLine.getId() != null ? Objects.equals(getId(), orderLine.getId()) : Objects.equals(getOrder(), orderLine.getOrder());
     }
 
     @Override
     public final int hashCode() {
-        return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
+        return (this instanceof HibernateProxy hibernateProxy) ?
+                hibernateProxy.getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
     }
+
 }

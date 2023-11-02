@@ -24,7 +24,6 @@ public final class Mappers {
         throw new IllegalStateException("Shouldn't be instanced");
     }
 
-    @Singleton
     @Provider
     @SuppressWarnings("unused")
     public static final class CustomJacksonMapperProvider implements ContextResolver<ObjectMapper> {
@@ -36,8 +35,9 @@ public final class Mappers {
                     registerModule(new JavaTimeModule())
                     .registerModule(new ParameterNamesModule(JsonCreator.Mode.PROPERTIES))
                     // to allow implicit json construction without JsonProperty in constructor in some cases
-                    .enable(SerializationFeature.INDENT_OUTPUT)             // enable pretty print (indent the JSON
-                    .enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
+                    .enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT)
+                    .enable(SerializationFeature.INDENT_OUTPUT)
+                    .enable(SerializationFeature.INDENT_OUTPUT);
         }
 
         @Override

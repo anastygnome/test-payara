@@ -1,5 +1,7 @@
 package fr.univ.tln.tdomenge293.model.jpa_impl;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import fr.univ.tln.tdomenge293.interfaces.model.Client;
 import fr.univ.tln.tdomenge293.utils.ExtendedEmailValidator;
 import jakarta.persistence.*;
@@ -9,6 +11,7 @@ import org.hibernate.proxy.HibernateProxy;
 
 import java.io.Serial;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 
 @Getter
@@ -17,6 +20,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Entity
 @Table(name = "CLIENTS")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "number")
 public class ClientJpaImpl implements Client {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -27,9 +31,11 @@ public class ClientJpaImpl implements Client {
     @ExtendedEmailValidator
     @Column(unique = true)
     String email;
+    @OneToMany(orphanRemoval = true)
+    @ToString.Exclude
+    private Set<OrderJpaImpl> orders;
     @Serial
     private static final long serialVersionUID = 1;
-
     private ClientJpaImpl(String firstName, String lastName, String email) {
         this.firstName = firstName;
         this.lastName = lastName;

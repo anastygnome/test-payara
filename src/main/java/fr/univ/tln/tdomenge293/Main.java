@@ -29,7 +29,7 @@ public class Main {
         try {
             tmp = Persistence.createEntityManagerFactory("TpPU");
         } catch (Exception e) {
-            log.info(e.getMessage());
+            log.debug(e.getMessage());
             log.warn("NO DB");
         }
         emf = tmp;
