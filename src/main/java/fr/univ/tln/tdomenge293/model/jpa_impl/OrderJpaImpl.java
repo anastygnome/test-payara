@@ -62,7 +62,6 @@ public class OrderJpaImpl implements Order, Serializable {
     private OrderJpaImpl( BigDecimal price, ClientJpaImpl client) {
         this.price = price;
         this.client = client;
-        client.getOrders().add(this);
         this.orderLines = new HashSet<>();
     }
 
@@ -94,7 +93,7 @@ public void addLine(OrderLineJpaImpl line) {
 
     public void setOrderLines(Set<OrderLine> items) {
         orderLines = new HashSet<>();
-        items.stream().filter(OrderLineJpaImpl.class::isInstance).forEach(ord -> orderLines.add((OrderLineJpaImpl) ord));
+        items.stream().filter(OrderLineJpaImpl.class::isInstance).forEach(ord -> { ord.setOrder(this);getOrderLines().add((OrderLineJpaImpl) ord);} );
     }
 
     @Override

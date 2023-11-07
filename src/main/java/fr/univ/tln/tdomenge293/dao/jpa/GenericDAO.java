@@ -6,7 +6,6 @@ import jakarta.persistence.criteria.CriteriaDelete;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 import jakarta.persistence.metamodel.EntityType;
-import org.hibernate.exception.ConstraintViolationException;
 
 import java.io.Serializable;
 import java.util.List;
@@ -34,7 +33,7 @@ abstract class GenericDAO<T, K extends Serializable> {
             @SuppressWarnings("unchecked")
             // SAFETY: The following cast is unchecked because Java's type erasure means
             // we don't have direct runtime information about the generic type K.
-            // we trust Hibernate gives us information here
+            // we trust JPA gives us information here
             Class<K> keyClassCast = (Class<K>) entityType.getIdType().getJavaType();
             this.keyClass = keyClassCast;
         } catch (ClassCastException e) {

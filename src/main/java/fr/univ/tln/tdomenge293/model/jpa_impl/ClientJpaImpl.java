@@ -1,6 +1,7 @@
 package fr.univ.tln.tdomenge293.model.jpa_impl;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import fr.univ.tln.tdomenge293.interfaces.model.Client;
 import fr.univ.tln.tdomenge293.utils.ExtendedEmailValidator;
@@ -10,6 +11,7 @@ import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
 
 import java.io.Serial;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
@@ -24,18 +26,19 @@ import java.util.UUID;
 public class ClientJpaImpl implements Client {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    UUID number;
+    private UUID number;
     @NotNull String firstName;
     @NotNull String lastName;
     @NotNull
     @ExtendedEmailValidator
     @Column(unique = true)
-    String email;
-    @OneToMany(orphanRemoval = true)
+   private String email;
+    @OneToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
     @ToString.Exclude
-    private Set<OrderJpaImpl> orders;
+    private Set<OrderJpaImpl> orders = new HashSet<>();
     @Serial
     private static final long serialVersionUID = 1;
+
     private ClientJpaImpl(String firstName, String lastName, String email) {
         this.firstName = firstName;
         this.lastName = lastName;

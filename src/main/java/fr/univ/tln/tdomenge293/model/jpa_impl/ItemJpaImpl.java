@@ -22,7 +22,8 @@ import java.util.UUID;
 @ToString
 @RequiredArgsConstructor
 @Entity
-@Table(name = "ITEMS")
+@Table(name = "ITEMS",
+uniqueConstraints = @UniqueConstraint(columnNames = "name"))
 
 public class ItemJpaImpl implements Item, Serializable {
     String name;
@@ -34,6 +35,16 @@ public class ItemJpaImpl implements Item, Serializable {
     BigDecimal price;
     @Serial
     private static final long serialVersionUID=1L;
+
+    private ItemJpaImpl(String name, BigDecimal price) {
+        this.name = name;
+        this.price = price;
+    }
+
+    public static ItemJpaImpl of(String name, BigDecimal price) {
+        return new ItemJpaImpl(name, price);
+    }
+
     @Override
     public final boolean equals(Object o) {
         if (this == o) return true;

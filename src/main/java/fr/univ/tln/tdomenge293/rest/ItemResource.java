@@ -1,41 +1,39 @@
 package fr.univ.tln.tdomenge293.rest;
 
-import fr.univ.tln.tdomenge293.dao.jpa.ClientDAO;
-import fr.univ.tln.tdomenge293.model.jpa_impl.ClientJpaImpl;
+import fr.univ.tln.tdomenge293.Main;
+import fr.univ.tln.tdomenge293.dao.jpa.ItemDAO;
+import fr.univ.tln.tdomenge293.model.jpa_impl.ItemJpaImpl;
 import jakarta.persistence.PersistenceException;
 import jakarta.persistence.RollbackException;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
-import jakarta.ws.rs.core.*;
+import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.UriInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.ConstraintViolationException;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
-import static fr.univ.tln.tdomenge293.Main.emf;
-
+@Path("item")
 @Slf4j
-@Path("client")
-
-public class ClientResource {
-    private static final ClientDAO dao = ClientDAO.of(emf);
+public class ItemResource {
+    private static final ItemDAO dao = ItemDAO.of(Main.emf);
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<ClientJpaImpl> getClients() {
+    public List<ItemJpaImpl> getIt() {
         return dao.findAll();
-
     }
 
     @GET
-    @Valid
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public ClientJpaImpl getclient(@PathParam("id") UUID id) {
-        ClientJpaImpl result = dao.findById(id);
+    public ItemJpaImpl getitem(@PathParam("id") UUID id) {
+        ItemJpaImpl result = dao.findById(id);
         if (result == null) throw new NotFoundException();
         return result;
     }
@@ -43,8 +41,7 @@ public class ClientResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response receiveClient(@Context UriInfo uriInfo, @Valid  ClientJpaImpl r) {
-        log.info(r.toString());
+    public Response receiveitem(@Context UriInfo uriInfo, ItemJpaImpl r) {
         URI newResourceUri;
         if (r == null || r.getNumber() != null) throw new BadRequestException();
         log.info(r.toString());
@@ -53,9 +50,9 @@ public class ClientResource {
             newResourceUri = uriInfo.getAbsolutePathBuilder().path(r.getNumber().toString()).build();
             //dao.delete(r);
             return Response.created(newResourceUri).entity(r).build();
-        } catch (PersistenceException e) {
-
-            UUID existingId = dao.findIdByEmail(r.getEmail());
+        } catch (RollbackException e) {
+            log.error(e.getClass().getName());
+            UUID existingId = dao.findIDByName(r.getName());
             if (existingId != null) {
                 newResourceUri = uriInfo.getAbsolutePathBuilder().path(existingId.toString()).build();
                 return Response.seeOther(newResourceUri).build();
@@ -66,7 +63,7 @@ public class ClientResource {
 
     @DELETE
     @Path("{id}")
-    public Response deleteClient(@PathParam("id") UUID id) {
+    public Response deleteitem(@PathParam("id") UUID id) {
         try {
             dao.deleteByID(id);
             return Response.noContent().build();
@@ -80,14 +77,14 @@ public class ClientResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Path("{id}")
-    public Response updateClient(ClientJpaImpl client, @PathParam("id") UUID id) {
-        if (client == null || client.getNumber() != null && client.getNumber() != id) throw new BadRequestException();
-        client.setNumber(id);
+    public Response updateitem(ItemJpaImpl item, @PathParam("id") UUID id) {
+        if (item == null || item.getNumber() != null && item.getNumber() != id) throw new BadRequestException();
+        item.setNumber(id);
         try {
-            dao.update(client);
+            dao.update(item);
 
         }
-        catch (Exception e) {
+        catch (RollbackException e) {
             if (e.getCause() instanceof ConstraintViolationException){
                 return Response.status(Response.Status.CONFLICT).build();
             }
@@ -96,18 +93,4 @@ public class ClientResource {
         return Response.noContent().build();
 
     }
-/*
-    @Path("{id}")
-    @PATCH
-    @Consumes(MediaType.APPLICATION_JSON_PATCH_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public ClientJpaImpl testpatch(@PathParam("id") UUID id, ClientJpaImpl client) {
-        if (dao.findById(id) == null || client == null) {
-            throw new NotFoundException();
-        }
-        dao.update(client);
-        return client;
-    }
-
- */
 }

@@ -26,6 +26,7 @@ public final class Mappers {
 
     @Provider
     @SuppressWarnings("unused")
+    @Singleton
     public static final class CustomJacksonMapperProvider implements ContextResolver<ObjectMapper> {
 
         final ObjectMapper mapper;
