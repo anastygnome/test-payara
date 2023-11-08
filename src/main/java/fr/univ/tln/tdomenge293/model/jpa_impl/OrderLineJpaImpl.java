@@ -26,10 +26,12 @@ public class OrderLineJpaImpl implements OrderLine, Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @Access(AccessType.PROPERTY)
     private UUID id;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "order_number", nullable = false)
+
     private OrderJpaImpl order;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, optional = false)
@@ -37,6 +39,16 @@ public class OrderLineJpaImpl implements OrderLine, Serializable {
     private ItemJpaImpl item;
     @Min(0)
     private int quantity;
+
+    private OrderLineJpaImpl(OrderJpaImpl order, ItemJpaImpl item, int quantity) {
+        this.order = order;
+        this.item = item;
+        this.quantity = quantity;
+    }
+
+    public static OrderLineJpaImpl of(OrderJpaImpl order, ItemJpaImpl item, int quantity) {
+        return new OrderLineJpaImpl(order, item, quantity);
+    }
 
     public void setOrder(Order order) {
         if (order instanceof OrderJpaImpl orderJ) {

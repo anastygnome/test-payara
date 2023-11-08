@@ -38,7 +38,7 @@ public final class Mappers {
                     // to allow implicit json construction without JsonProperty in constructor in some cases
                     .enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT)
                     .enable(SerializationFeature.INDENT_OUTPUT)
-                    .enable(SerializationFeature.INDENT_OUTPUT);
+                    .enable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
         }
 
         @Override
@@ -61,5 +61,18 @@ public final class Mappers {
             return Response.status(Response.Status.BAD_REQUEST).entity(messages).type(MediaType.TEXT_PLAIN_TYPE).build();
         }
 
+    }
+
+    @Provider
+    public static final class ErrorHandler implements ExceptionMapper<Throwable> {
+
+        @Override
+        public Response toResponse(Throwable e) {
+
+            Response.ResponseBuilder responseBuilder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            responseBuilder.entity(e.getMessage());
+
+            return responseBuilder.build();
+        }
     }
 }

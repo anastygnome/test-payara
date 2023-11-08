@@ -22,8 +22,10 @@ import java.util.UUID;
 @ToString
 @RequiredArgsConstructor
 @Entity
-@Table(name = "ITEMS",
-uniqueConstraints = @UniqueConstraint(columnNames = "name"))
+@Table(name = "ITEMS", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"name"})
+})
+@NamedQuery(name = "ItemJpaImpl.findByNumber", query = "select i from ItemJpaImpl i where i.number = :number")
 
 public class ItemJpaImpl implements Item, Serializable {
     String name;
@@ -49,8 +51,8 @@ public class ItemJpaImpl implements Item, Serializable {
     public final boolean equals(Object o) {
         if (this == o) return true;
         if (o == null) return false;
-        Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
-        Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
+        Class<?> oEffectiveClass = o instanceof HibernateProxy proxy? proxy.getHibernateLazyInitializer().getPersistentClass() : o.getClass();
+        Class<?> thisEffectiveClass = this instanceof HibernateProxy proxy? proxy.getHibernateLazyInitializer().getPersistentClass() : this.getClass();
         if (thisEffectiveClass != oEffectiveClass) return false;
         ItemJpaImpl itemJpa = (ItemJpaImpl) o;
         return getNumber() != null && Objects.equals(getNumber(), itemJpa.getNumber());
@@ -58,6 +60,6 @@ public class ItemJpaImpl implements Item, Serializable {
 
     @Override
     public final int hashCode() {
-        return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
+        return this instanceof HibernateProxy proxy ? proxy.getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
     }
 }

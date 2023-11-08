@@ -1,4 +1,4 @@
-package fr.univ.tln.tdomenge293.dao.jpa;
+package fr.univ.tln.tdomenge293.jpa.dao;
 
 import jakarta.persistence.*;
 import jakarta.persistence.criteria.CriteriaBuilder;

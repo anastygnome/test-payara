@@ -1,8 +1,9 @@
 package fr.univ.tln.tdomenge293.rest;
 
 import fr.univ.tln.tdomenge293.Main;
-import fr.univ.tln.tdomenge293.jpa.dao.ItemDAO;
-import fr.univ.tln.tdomenge293.model.jpa_impl.ItemJpaImpl;
+import fr.univ.tln.tdomenge293.jpa.dao.OrderDAO;
+import fr.univ.tln.tdomenge293.model.jpa_impl.OrderJpaImpl;
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceException;
 import jakarta.persistence.RollbackException;
 import jakarta.ws.rs.*;
@@ -17,22 +18,26 @@ import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 
-@Path("item")
+@Path("order")
 @Slf4j
-public class ItemResource {
-    private static final ItemDAO dao = ItemDAO.of(Main.emf);
+public class OrderResource {
+    private static final OrderDAO dao = OrderDAO.of(Main.emf);
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<ItemJpaImpl> getIt() {
-        return dao.findAll();
+    public List<OrderJpaImpl> getIt() {
+        try (
+            EntityManager em = Main.emf.createEntityManager())
+        {
+            return em.createQuery("select c from  OrderJpaImpl c ", OrderJpaImpl.class).getResultList();
+        }
     }
 
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public ItemJpaImpl getItem(@PathParam("id") UUID id) {
-        ItemJpaImpl result = dao.findById(id);
+    public OrderJpaImpl getOrder(@PathParam("id") UUID id) {
+        OrderJpaImpl result = dao.findById(id);
         if (result == null) throw new NotFoundException();
         return result;
     }
@@ -40,7 +45,7 @@ public class ItemResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response receiveItem(@Context UriInfo uriInfo, ItemJpaImpl r) {
+    public Response receiveOrder(@Context UriInfo uriInfo, OrderJpaImpl r) {
         URI newResourceUri;
         if (r == null || r.getNumber() != null) throw new BadRequestException();
         log.info(r.toString());
@@ -51,18 +56,14 @@ public class ItemResource {
             return Response.created(newResourceUri).entity(r).build();
         } catch (RollbackException e) {
             log.error(e.getClass().getName());
-            UUID existingId = dao.findIDByName(r.getName());
-            if (existingId != null) {
-                newResourceUri = uriInfo.getAbsolutePathBuilder().path(existingId.toString()).build();
-                return Response.seeOther(newResourceUri).build();
-            } else return Response.status(Response.Status.CONFLICT).build();
+            return Response.status(Response.Status.CONFLICT).build();
 
         }
     }
 
     @DELETE
     @Path("{id}")
-    public Response deleteItem(@PathParam("id") UUID id) {
+    public Response deleteOrder(@PathParam("id") UUID id) {
         try {
             dao.deleteByID(id);
             return Response.noContent().build();
@@ -76,11 +77,11 @@ public class ItemResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Path("{id}")
-    public Response updateitem(ItemJpaImpl item, @PathParam("id") UUID id) {
-        if (item == null || item.getNumber() != null && item.getNumber() != id) throw new BadRequestException();
-        item.setNumber(id);
+    public Response updateOrder(OrderJpaImpl order, @PathParam("id") UUID id) {
+        if (order == null || order.getNumber() != null && order.getNumber() != id) throw new BadRequestException();
+        order.setNumber(id);
         try {
-            dao.update(item);
+            dao.update(order);
 
         }
         catch (RollbackException e) {

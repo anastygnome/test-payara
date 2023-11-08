@@ -6,16 +6,15 @@
 
     <persistence-unit name="TpPU" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
-        <class>fr.univ.tln.tdomenge293.model.jpa_impl.OrderJpaImpl</class>
-        <class>fr.univ.tln.tdomenge293.model.jpa_impl.ClientJpaImpl</class>
-        <class>fr.univ.tln.tdomenge293.model.jpa_impl.OrderLineJpaImpl</class>
-
+        <exclude-unlisted-classes>false</exclude-unlisted-classes>
         <properties>
             <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>
             <property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql://db:5432,127.0.0.1:5432/TP_BDD"/>
             <property name="jakarta.persistence.jdbc.user" value="postgres"/>
             <property name="jakarta.persistence.jdbc.password" value="test"/>
+            <!--property name="eclipselink.ddl-generation" value="create-or-extend-tables"-->
             <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <!--property name="jakarta.persistence.schema-generation.database.action" value="c"-->
             <!--property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"-->
             <property name="hibernate.show_sql" value="false"/>
             <property name="hibernate.connection.provider_class"

@@ -1,9 +1,6 @@
 package fr.univ.tln.tdomenge293.model.jpa_impl;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 import fr.univ.tln.tdomenge293.interfaces.model.Client;
 import fr.univ.tln.tdomenge293.interfaces.model.Order;
 import fr.univ.tln.tdomenge293.interfaces.model.OrderLine;
@@ -37,6 +34,7 @@ import java.util.*;
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "number")
 public class OrderJpaImpl implements Order, Serializable {
     @Id
+    @Access(AccessType.PROPERTY)
     @GeneratedValue(strategy = GenerationType.UUID)
     UUID number;
     @FutureOrPresent
@@ -48,25 +46,24 @@ public class OrderJpaImpl implements Order, Serializable {
     @Length(min = 3,max = 3)
     String currency ="EUR";
     @NotNull
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, optional = false)
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, optional = false,fetch = FetchType.LAZY)
     @JoinColumn(name = "client_number", nullable = false)
     @JsonIdentityReference(alwaysAsId = true)
     private ClientJpaImpl client;
 
     @ToString.Exclude
-    @OneToMany(mappedBy = "order", orphanRemoval = true,cascade = {CascadeType.PERSIST,CascadeType.MERGE})
-    private Set<OrderLineJpaImpl> orderLines = new LinkedHashSet<>();
+    @OneToMany(mappedBy = "order", orphanRemoval = true,cascade = {CascadeType.ALL},fetch = FetchType.EAGER)
+    private Set<OrderLineJpaImpl> orderLines = new HashSet<>();
    @Serial
     private static final long serialVersionUID=1;
 
-    private OrderJpaImpl( BigDecimal price, ClientJpaImpl client) {
-        this.price = price;
+    private OrderJpaImpl( ClientJpaImpl client) {
         this.client = client;
-        this.orderLines = new HashSet<>();
+        client.getOrders().add(this);
     }
 
-    public static OrderJpaImpl of( BigDecimal price, ClientJpaImpl client) {
-        return new OrderJpaImpl(price, client);
+    public static OrderJpaImpl of(ClientJpaImpl client) {
+        return new OrderJpaImpl(client);
     }
 
     @Override
@@ -78,6 +75,7 @@ public class OrderJpaImpl implements Order, Serializable {
     public void setClient(Client client) {
         if (client instanceof ClientJpaImpl clientJl) {
             this.client = clientJl;
+            clientJl.getOrders().add(this);
         }
     }
 public void addLine(OrderLineJpaImpl line) {

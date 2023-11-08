@@ -1,4 +1,4 @@
-package fr.univ.tln.tdomenge293.dao.jpa;
+package fr.univ.tln.tdomenge293.jpa.dao;
 
 import fr.univ.tln.tdomenge293.model.jpa_impl.ItemJpaImpl;
 import jakarta.persistence.EntityManagerFactory;

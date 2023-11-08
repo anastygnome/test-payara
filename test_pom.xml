@@ -172,11 +172,6 @@
             <artifactId>jackson-databind</artifactId>
             <version>${jackson.version}</version>
         </dependency>
-        <dependency>
-            <groupId>net.datafaker</groupId>
-            <artifactId>datafaker</artifactId>
-            <version>2.0.2</version>
-        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -273,3 +268,4 @@
         <mainClass>fr.univ.tln.tdomenge293.Main</mainClass>
     </properties>
 </project>
+
