@@ -46,7 +46,7 @@ public class OrderJpaImpl implements Order, Serializable {
     @Length(min = 3,max = 3)
     String currency ="EUR";
     @NotNull
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, optional = false,fetch = FetchType.LAZY)
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, optional = false)
     @JoinColumn(name = "client_number", nullable = false)
     @JsonIdentityReference(alwaysAsId = true)
     private ClientJpaImpl client;

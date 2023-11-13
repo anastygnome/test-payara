@@ -28,8 +28,8 @@ public class ClientResource {
     private final ClientDAO dao = ClientDAO.of(emf);
     @GET
 @Produces(MediaType.APPLICATION_JSON)
-    public List<ClientJpaImpl> getIt() {
-       return dao.findAll();
+    public List<ClientJpaDto> getIt() {
+       return ClientDTOMapper.getAllClientDtos();
     }
     @GET
     @Path("{id}")

@@ -34,7 +34,7 @@ import java.util.UUID;
         @ExtendedEmailValidator
         @Column(unique = true)
        private String email;
-        @OneToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
+        @OneToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE},orphanRemoval = true)
         @ToString.Exclude
         @JsonIgnore
         private Set<OrderJpaImpl> orders = new HashSet<>();
