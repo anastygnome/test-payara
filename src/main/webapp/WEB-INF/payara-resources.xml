@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!DOCTYPE resources PUBLIC "-//Payara.fish//DTD Payara Server 4 Resource Definitions//EN"
-        "https://raw.githubusercontent.com/payara/Payara-Enterprise-Documentation/master/docs/modules/ROOT/pages/schemas/payara-resources_1_6.dtd">
 
+
+<!DOCTYPE resources PUBLIC "-//Payara.fish//DTD Payara Server 4 Resource Definitions//EN" "https://raw.githubusercontent.com/payara/Payara-Enterprise-Documentation/master/docs/modules/ROOT/pages/schemas/payara-resources_1_6.dtd">
 <resources>
-    <jdbc-resource pool-name="MyH2Pool"
-                   jndi-name="java:app/jdbc/TestDB"
-                   enabled="true" />
+<jdbc-resource pool-name="TestDb"
+               jndi-name="java:app/jdbc/TestDB"
+               enabled="true" />
 
-    <jdbc-connection-pool name="MyH2Pool"
-                          res-type="javax.sql.DataSource"
-                          datasource-classname="org.h2.jdbcx.JdbcDataSource">
-        <property name="user" value="dba"/>
-        <property name="password" value="secret"/>
-        <property name="url" value="jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1"/>
-    </jdbc-connection-pool>
+<jdbc-connection-pool datasource-classname="org.h2.jdbcx.JdbcDataSource"
+                      name="TestDb"
+                      res-type="javax.sql.DataSource">
+    <property name="URL" value="jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1" />
+    <property name="User" value="dba" />
+    <property name="Password" value="secret" />
+</jdbc-connection-pool>
 </resources>

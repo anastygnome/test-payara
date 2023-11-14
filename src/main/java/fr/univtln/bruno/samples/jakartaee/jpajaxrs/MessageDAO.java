@@ -2,6 +2,7 @@ package fr.univtln.bruno.samples.jakartaee.jpajaxrs;
 
 import jakarta.annotation.Resource;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.RequestScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
@@ -12,14 +13,13 @@ import java.util.List;
 
 import static jakarta.transaction.Transactional.TxType.REQUIRED;
 
-@ApplicationScoped
+@RequestScoped
 public class MessageDAO {
 
-    @PersistenceContext(unitName = "TestUnit")
+    @PersistenceContext
     private EntityManager em;
 
-    @Resource(name= "java:app/jdbc/TestDB")
-    private DataSource myTestDatasource;
+
 
     @Transactional(REQUIRED)
     public void create(Message message) {

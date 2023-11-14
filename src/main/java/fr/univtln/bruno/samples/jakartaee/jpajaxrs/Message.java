@@ -15,19 +15,26 @@ import java.util.UUID;
 @NamedQuery(name="Message.findAll",query = "select m from Message m")
 @Table(name = "MESSAGE")
 @NoArgsConstructor
-@AllArgsConstructor(staticName = "of")
 @Getter
 @ToString
 @JsonPropertyOrder({ "id", "content" })
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
+
 public class Message {
     @Id
     @GeneratedValue
     @Column(name = "ID")
     private UUID id;
 
+    private Message(String content) {
+        this.content = content;
+    }
+
     @NotNull
     @Column(name = "CONTENT")
     @NotBlank
     private String content;
+    public static Message createMessage(String content) {
+        return new Message(content);
+    }
 }

@@ -21,6 +21,7 @@
 		<compiler-plugin.version>3.11.0</compiler-plugin.version>
 		<war-plugin.version>3.3.2</war-plugin.version>
 		<cargo.version>1.10.7</cargo.version>
+		<hibernate.version>6.3.1.Final</hibernate.version>
 
 		<payara.domainName>domain1</payara.domainName>
 	</properties>
@@ -55,6 +56,17 @@
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
 			<version>1.4.11</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.hibernate.orm/hibernate-core -->
+		<dependency>
+		<groupId>org.hibernate.orm</groupId>
+		<artifactId>hibernate-core</artifactId>
+		<version>${hibernate.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate.orm</groupId>
+			<artifactId>hibernate-hikaricp</artifactId>
+			<version>${hibernate.version}</version>
 		</dependency>
 
 	</dependencies>

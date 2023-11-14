@@ -20,7 +20,7 @@ public class CDIInitializerOnStart {
 
     public void onStart(@Observes @Initialized(ApplicationScoped.class) Object object) {
         log.info("Init CDI singleton");
-        messageDAO.create(Message.of(UUID.randomUUID(),"Test init massage"));
+        //messageDAO.create(Message.createMessage("Test init massage"));
     }
 
 }

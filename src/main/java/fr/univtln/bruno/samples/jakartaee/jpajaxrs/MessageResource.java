@@ -1,6 +1,7 @@
 package fr.univtln.bruno.samples.jakartaee.jpajaxrs;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
