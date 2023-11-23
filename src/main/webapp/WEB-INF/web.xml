@@ -5,20 +5,8 @@
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
 	</welcome-file-list>
-
-	<data-source>
-		<name>java:global/ExampleDataSource</name>
-		<class-name>com.mysql.jdbc.jdbc2.optional.MysqlXADataSource</class-name>
-		<server-name>localhost</server-name>
-		<port-number>3306</port-number>
-		<database-name>mysql</database-name>
-		<user>test</user>
-		<password>test</password>
-		<!-- Example of how to use a Payara specific custom connection pool setting -->
-		<property>
-			<name>fish.payara.log-jdbc-calls</name>
-			<value>true</value>
-		</property>
-	</data-source>
-
+	<context-param>
+		<param-name>jersey.config.jsonFeature</param-name>
+		<param-value>JacksonFeature</param-value>
+	</context-param>
 </web-app>

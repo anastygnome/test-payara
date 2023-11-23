@@ -1,6 +1,6 @@
-*
+*t
 !mvnw
 !mvnw.cmd
 !.mvn
-!src
+!src/*
 !pom.xml
