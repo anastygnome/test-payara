@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+
+<!DOCTYPE resources PUBLIC "-//Payara.fish//DTD Payara Server 4 Resource Definitions//EN" "https://raw.githubusercontent.com/payara/Payara-Enterprise-Documentation/master/docs/modules/ROOT/pages/schemas/payara-resources_1_6.dtd">
+<resources>
+<jdbc-resource pool-name="TestDb"
+               jndi-name="java:app/jdbc/TestDB"
+               enabled="true" />
+
+    <jdbc-connection-pool datasource-classname="org.postgresql.ds.PGSimpleDataSource"
+                      name="TestDb"
+                      res-type="javax.sql.DataSource">
+        <property name="URL" value="jdbc:postgresql://localhost:5432,db:5432/TP_BDD"/>
+        <property name="User" value="postgres"/>
+        <property name="Password" value="test"/>
+</jdbc-connection-pool>
+</resources>

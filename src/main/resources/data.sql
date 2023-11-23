@@ -1,0 +1,2 @@
+insert INTO MESSAGE(ID,CONTENT) VALUES ('42b4f0fd-5482-4fac-a63b-1c524b2101b1','a dummy message.');
+insert INTO MESSAGE(ID,CONTENT) VALUES ('980bed12-996d-4e11-ae3b-991d9521766f','another useless message.');
